@@ -1,4 +1,4 @@
-import { createElement } from './mini-react';
+import { createElement, Component } from './mini-react';
 import { render } from './mini-react-dom';
 
 function Header() {
@@ -11,14 +11,16 @@ function Header() {
   );
 }
 
-function Body() {
-  return (
-    <div id="c" class="ddd">
-      <div>body</div>
-      <div></div>
-      <div></div>
-    </div>
-  );
+class Body extends Component {
+  render() {
+    return (
+      <div id="c" class="ddd">
+        <div>body</div>
+        <div>1111</div>
+        <div>2222</div>
+      </div>
+    );
+  }
 }
 
 function App(props) {

@@ -1,8 +1,16 @@
 function createElement(type, props, ...children) {
   if (typeof type === 'string') {
+    // 原生节点
     return createNativeNode(type, props, children);
   } else {
-    return type({ ...props, children: children });
+    if (type.prototype.isReactComponent) {
+      // 类组件
+      const instance = new type({ ...props, children: children });
+      return instance.render();
+    } else {
+      // 函数组件
+      return type({ ...props, children: children });
+    }
   }
 }
 
