@@ -24,6 +24,7 @@ class Body extends Component {
 }
 
 function App(props) {
+  console.log('props.children', props.children);
   return (
     <div id="a" class="bbb">
       <div>abc11</div>
@@ -38,6 +39,8 @@ function App(props) {
 
 render(
   <App>
+    <div>aaaassss</div>
+    <div>aaaassss</div>
     <div>aaaassss</div>
   </App>,
   document.body
