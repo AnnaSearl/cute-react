@@ -1,13 +1,7 @@
 // element 就是虚拟dom，即 vnode
 function render(element, container) {
   const node = createNode(element);
-  if (Array.isArray(node)) {
-    for (const nodeItem of node) {
-      container.appendChild(nodeItem);
-    }
-  } else {
-    container.appendChild(node);
-  }
+  container.appendChild(node);
 }
 
 function createNode(vnode) {
@@ -26,11 +20,6 @@ function createNode(vnode) {
     }
   } else if (typeof vnode === 'string') {
     node = createNativeTextNode(vnode);
-  } else if (Array.isArray(vnode)) {
-    node = [];
-    for (const vnodeItem of vnode) {
-      node.push(createNode(vnodeItem));
-    }
   }
 
   return node;
@@ -58,7 +47,13 @@ function reconcileChildren(parent, vchildren) {
   for (const child of children) {
     // vnode --> node
     // parent append node
-    render(child, parent);
+    if (Array.isArray(child)) {
+      for (const item of child) {
+        render(item, parent);
+      }
+    } else {
+      render(child, parent);
+    }
   }
 }
 
