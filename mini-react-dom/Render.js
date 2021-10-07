@@ -1,3 +1,5 @@
+import flatArray from '../Utils';
+
 let wipRoot = null;
 
 // element 就是虚拟dom，即 vnode
@@ -27,9 +29,14 @@ function reconcileChildren(fiber, fiberChildren) {
     return;
   }
 
-  const children = Array.isArray(fiberChildren)
-    ? fiberChildren
-    : [fiberChildren];
+  let children = Array.isArray(fiberChildren) ? fiberChildren : [fiberChildren];
+
+  // 拍平数组，针对 props.children 为数组这种情况
+  // <div>
+  //   <div></div>
+  //   {props.children}
+  // </div>
+  children = flatArray(children);
 
   // 下面的操作就是拼接 fiber 链表
   let prevFiber = null;
@@ -110,7 +117,7 @@ function performUnitOfWork(workInProgress) {
     updateHostComponent(workInProgress);
   }
 
-  console.log('workInProgress', workInProgress);
+  // console.log('workInProgress', workInProgress);
 
   // return next fiber
   if (workInProgress.child) {
@@ -127,98 +134,47 @@ function performUnitOfWork(workInProgress) {
 }
 
 function workLoop(deadline) {
-  // && deadline.timeRemaining() > 1
-  while (nextUnitOfWork) {
+  // do task
+  while (nextUnitOfWork && deadline.timeRemaining() > 1) {
     nextUnitOfWork = performUnitOfWork(nextUnitOfWork);
+  }
+
+  // commit
+  if (!nextUnitOfWork && wipRoot) {
+    commitRoot();
   }
 }
 
 requestIdleCallback(workLoop);
 
+function commitRoot() {
+  commitWork(wipRoot.child);
+  wipRoot = null;
+}
+
+function commitWork(workInProgress) {
+  // 递归终止条件
+  if (!workInProgress) {
+    return;
+  }
+
+  // commit self
+  // 递归找到最近的含有原生 dom 的 fiber 父节点
+  let parentFiber = workInProgress.return;
+  while (!parentFiber.stateNode) {
+    parentFiber = parentFiber.return;
+  }
+  const parentNode = parentFiber.stateNode;
+
+  if (workInProgress.stateNode) {
+    parentNode.appendChild(workInProgress.stateNode);
+  }
+
+  // commit child
+  commitWork(workInProgress.child);
+
+  // commit sibling
+  commitWork(workInProgress.sibling);
+}
+
 export default render;
-
-/*
- **
- **
- **
- **
- **
- **
- **
- **
- **
- */
-
-function createNode(vnode) {
-  const { type } = vnode;
-
-  let node = null;
-  if (typeof type === 'string') {
-    node = createNativeNode(vnode);
-  } else if (typeof type === 'function') {
-    if (type.prototype.isReactComponent) {
-      // 类组件
-      node = createClassNode(vnode);
-    } else {
-      // 函数组件
-      node = createFunctionNode(vnode);
-    }
-  } else if (typeof vnode === 'string') {
-    node = createNativeTextNode(vnode);
-  }
-
-  return node;
-}
-
-function createNativeNode(vnode) {
-  const { type, props } = vnode;
-  const node = document.createElement(type);
-
-  for (const key in props) {
-    if (Object.hasOwnProperty.call(props, key)) {
-      if (key !== 'children') {
-        node.setAttribute(key, props[key]);
-      }
-    }
-  }
-
-  reconcileChildrenNodes(vnode, props.children);
-
-  return node;
-}
-
-function createNativeTextNode(vnode) {
-  const node = document.createTextNode(vnode);
-  return node;
-}
-
-function createFunctionNode(vnode) {
-  const { type, props } = vnode;
-  const virtualNode = type(props);
-  const node = createNode(virtualNode);
-  return node;
-}
-
-function createClassNode(vnode) {
-  const { type, props } = vnode;
-  const instance = new type(props);
-  const virtualNode = instance.render();
-  const node = createNode(virtualNode);
-  return node;
-}
-
-function reconcileChildrenNodes(parent, vchildren) {
-  const children = Array.isArray(vchildren) ? vchildren : [vchildren];
-
-  for (const child of children) {
-    // vnode --> node
-    // parent append node
-    if (Array.isArray(child)) {
-      for (const item of child) {
-        render(item, parent);
-      }
-    } else {
-      render(child, parent);
-    }
-  }
-}
