@@ -1,4 +1,4 @@
-import { updateDom } from '../mini-react-dom/Dom';
+import { updateDom } from '../cute-react-dom/Dom';
 
 function commitDeletion(fiber, parentNode) {
   if (fiber.stateNode) {

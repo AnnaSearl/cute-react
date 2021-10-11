@@ -1,5 +1,5 @@
 import diffFiberNode from './FiberDiff';
-import { createDom } from '../mini-react-dom/Dom';
+import { createDom } from '../cute-react-dom/Dom';
 import { flatArray } from '../Utils';
 
 function reconcileChildren(parentFiber, childrenFiber) {

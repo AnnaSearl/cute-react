@@ -39,7 +39,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      title: 'Mini React',
+      title: 'Cute React',
     }),
   ],
 };

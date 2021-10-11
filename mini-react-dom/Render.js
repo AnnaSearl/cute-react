@@ -1,4 +1,4 @@
-import { FiberNode, triggerRequestIdle } from '../mini-react-reconciler';
+import { FiberNode, triggerRequestIdle } from '../cute-react-reconciler';
 
 // element 就是虚拟dom，即 vnode
 function render(element, container) {

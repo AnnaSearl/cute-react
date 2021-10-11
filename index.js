@@ -1,7 +1,7 @@
 /*eslint-disable*/
 
-import { createElement, Component, useState } from './mini-react';
-import { render } from './mini-react-dom';
+import { createElement, Component, useState } from './cute-react';
+import { render } from './cute-react-dom';
 
 function Header() {
   return (

@@ -1,14 +1,21 @@
 {
-  "name": "mini-react",
+  "name": "cute-react",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --open"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "react",
+    "cute-react"
+  ],
+  "author": "Anna",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AnnaSearl/annar"
+  },
   "devDependencies": {
     "@babel/core": "^7.15.5",
     "@babel/preset-env": "^7.15.6",
