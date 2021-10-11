@@ -6,11 +6,6 @@ dist
 yarn.lock
 .vscode
 .idea
-test/ts/**/*.js
 coverage
 *.sw[op]
 *.log
-package/
-preact-*.tgz
-preact.tgz
-jsx-csstype.d.ts

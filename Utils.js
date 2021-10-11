@@ -1,4 +1,4 @@
-export default function flatArray(arr) {
+function flatArray(arr) {
   if (!Array.isArray(arr)) {
     return [];
   }
@@ -6,3 +6,5 @@ export default function flatArray(arr) {
     return prev.concat(Array.isArray(cur) ? flatArray(cur) : cur);
   }, []);
 }
+
+export { flatArray };

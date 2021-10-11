@@ -1,4 +1,6 @@
-import { createElement, Component } from './mini-react';
+/*eslint-disable*/
+
+import { createElement, Component, useState } from './mini-react';
 import { render } from './mini-react-dom';
 
 function Header() {
@@ -16,22 +18,24 @@ class Body extends Component {
     return (
       <div id="c" class="ddd">
         <div>body</div>
-        <div>1111</div>
-        <div>2222</div>
       </div>
     );
   }
 }
 
 function App(props) {
-  console.log('props.children', props.children);
+  const [num, setNum] = useState(10);
+
+  const handleNumber = () => {
+    console.log('increase num');
+    setNum((c) => c + 1);
+  };
+
   return (
     <div id="a" class="bbb">
-      <div>abc11</div>
       <Header />
-      <div>dddddd</div>
       <Body />
-      <div></div>
+      <h1 onClick={handleNumber}>{num}</h1>
       {props.children}
     </div>
   );
@@ -39,10 +43,9 @@ function App(props) {
 
 render(
   <App>
-    <div>aaaassss</div>
-    <div>aaaassss</div>
-    <div>aaaassss</div>
-    <div>11111</div>
+    <div>First</div>
+    <div>Second</div>
+    <div>Third</div>
   </App>,
   document.body
 );
